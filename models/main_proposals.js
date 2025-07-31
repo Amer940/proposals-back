@@ -9,14 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      main_proposals.belongsTo(models.partners, { foreignKey: "partner_id" });
+      main_proposals.belongsTo(models.statuses, { foreignKey: "status_id" });
     }
   }
   main_proposals.init(
     {
-      email: DataTypes.STRING,
       demand: DataTypes.FLOAT,
       agreed: DataTypes.FLOAT,
-      status: DataTypes.STRING,
+      status_id: DataTypes.INTEGER,
       partner_id: DataTypes.INTEGER,
     },
     {

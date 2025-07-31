@@ -13,5 +13,13 @@ const sequelize = new Sequelize(
 const db = {};
 db.partners = require("./models/partners")(sequelize, Sequelize);
 db.main_proposals = require("./models/main_proposals")(sequelize, Sequelize);
+db.countries = require("./models/countries")(sequelize, Sequelize);
+db.statuses = require("./models/statuses")(sequelize, Sequelize);
+
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName]?.associate) {
+    db[modelName].associate(db);
+  }
+});
 
 module.exports = { sequelize, db };
