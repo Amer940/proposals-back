@@ -1,8 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const { getTableData } = require("../service/main-table.service");
+const {
+  getTableData,
+  deleteProposal,
+} = require("../service/main-table.service");
 
 router.get("/", getTableData);
+router.delete("/:id", deleteProposal);
 
 module.exports = router;

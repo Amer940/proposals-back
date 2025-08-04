@@ -15,6 +15,7 @@ db.partners = require("./models/partners")(sequelize, Sequelize);
 db.main_proposals = require("./models/main_proposals")(sequelize, Sequelize);
 db.countries = require("./models/countries")(sequelize, Sequelize);
 db.statuses = require("./models/statuses")(sequelize, Sequelize);
+db.Op = Sequelize.Op;
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName]?.associate) {
