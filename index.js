@@ -22,6 +22,7 @@ app.use(
   require("./modules/home/main-table/routes/main-table.route")
 );
 app.use("/api/partner", require("./modules/partner/routes/partner.route"));
+app.use("/api/country", require("./modules/country/routes/country.route"));
 
 async function startServer() {
   try {

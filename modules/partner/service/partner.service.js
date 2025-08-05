@@ -19,15 +19,15 @@ const {
 } = require("../validation/check-for-create-partner-schema.api");
 
 const getPartnerData = async (req, res) => {
-  const values = req.query;
+  const value = req.query;
 
   try {
-    const wherePartner = generateWhereForPartner(values);
-    const whereCountry = generateWhereForCountry(values);
+    const wherePartner = generateWhereForPartner(value);
+    const whereCountry = generateWhereForCountry(value);
 
     const data = await findPaginatedFilteredPartnerTableContentQuery(
-      values.page,
-      values.pageSize,
+      value.page,
+      value.pageSize,
       wherePartner,
       whereCountry
     );
@@ -45,15 +45,15 @@ const getPartnerData = async (req, res) => {
 };
 
 const createPartner = async (req, res) => {
-  const { values, error } = checkDataForCreatePartner.validate(req.body);
+  const { value, error } = checkDataForCreatePartner.validate(req.body);
 
   if (error) {
-    res.status(400).json({ message: error });
+    res.status(400).json({ message: error.message });
     return;
   }
 
   try {
-    const isntUniquePartner = await findPartnerWithNameOrEmailQuery(values);
+    const isntUniquePartner = await findPartnerWithNameOrEmailQuery(value);
 
     if (isntUniquePartner) {
       res
@@ -62,7 +62,7 @@ const createPartner = async (req, res) => {
       return;
     }
 
-    const partner = createPartnerCommand(values);
+    const partner = createPartnerCommand(value);
 
     if (!partner) {
       res.status(400).json({ message: "Partner was not created." });
@@ -71,16 +71,16 @@ const createPartner = async (req, res) => {
 
     res.status(201).json({ message: "Partner successfully created!" });
   } catch (err) {
-    console.log(JSON.stringify(err));
+    console.log(err);
     res.status(400).json("Error happened while creating partner.");
   }
 };
 
 const deletePartner = async (req, res) => {
-  const values = req.params;
+  const value = req.params;
 
   try {
-    await deletePartnerCommand(values.id);
+    await deletePartnerCommand(value.id);
 
     res.status(204).json({ message: "Partner succesffully deleted." });
   } catch (err) {

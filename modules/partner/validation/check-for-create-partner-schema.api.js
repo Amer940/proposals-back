@@ -24,7 +24,7 @@ const checkDataForCreatePartner = Joi.object({
     "string.min": "City must be at least 2 characters",
     "any.required": "City is required",
   }),
-  description: Joi.string().optional(),
+  description: Joi.string().optional().allow("", null),
 });
 
 module.exports = { checkDataForCreatePartner };
