@@ -25,6 +25,10 @@ app.use(
 app.use("/api/partner", require("./modules/partner/routes/partner.route"));
 app.use("/api/country", require("./modules/country/routes/country.route"));
 app.use("/api/statuses", require("./modules/statuses/routes/statuses.route"));
+app.use(
+  "/api/analytics",
+  require("./modules/analytics/routes/analytics.route")
+);
 
 async function startServer() {
   try {
@@ -34,6 +38,11 @@ async function startServer() {
     const countries = await db.createCountries();
     if (countries) {
       console.log("Countries created successfully.");
+    }
+
+    const statuses = await db.createStatuses();
+    if (statuses) {
+      console.log("Statuses created successfully.");
     }
 
     await sequelize.sync();

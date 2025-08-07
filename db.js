@@ -15,7 +15,44 @@ db.partners = require("./models/partners")(sequelize, Sequelize);
 db.main_proposals = require("./models/main_proposals")(sequelize, Sequelize);
 db.countries = require("./models/countries")(sequelize, Sequelize);
 db.statuses = require("./models/statuses")(sequelize, Sequelize);
+db.fn = Sequelize.fn;
+db.col = Sequelize.col;
+db.literal = Sequelize.literal;
 db.Op = Sequelize.Op;
+
+db.createStatuses = async () => {
+  try {
+    const count = await db.statuses.count();
+    if (count > 0) {
+      console.log("Countries already exist. Skipping creation.");
+      return false;
+    }
+
+    await db.countries.bulkCreate([
+      {
+        id: 1,
+        name: "Success",
+      },
+      {
+        id: 2,
+        name: "Denied",
+      },
+      {
+        id: 3,
+        name: "Sent",
+      },
+      {
+        id: 4,
+        name: "Ignored",
+      },
+    ]);
+
+    return true;
+  } catch (err) {
+    console.log("Failed to create statuses:", err);
+    throw err;
+  }
+};
 
 db.createCountries = async () => {
   try {
@@ -1017,7 +1054,7 @@ db.createCountries = async () => {
 
     return true;
   } catch (err) {
-    console.log("Failed to create:", err);
+    console.log("Failed to create countries:", err);
     throw err;
   }
 };
