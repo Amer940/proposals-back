@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { sequelize } = require("./db");
+const { db } = require("./db");
 
 const express = require("express");
 
@@ -18,16 +19,22 @@ app.use(
 app.use(express.json());
 
 app.use(
-  "/api/main-table",
-  require("./modules/home/main-table/routes/main-table.route")
+  "/api/proposals",
+  require("./modules/proposals/routes/proposals.route")
 );
 app.use("/api/partner", require("./modules/partner/routes/partner.route"));
 app.use("/api/country", require("./modules/country/routes/country.route"));
+app.use("/api/statuses", require("./modules/statuses/routes/statuses.route"));
 
 async function startServer() {
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
+
+    const countries = await db.createCountries();
+    if (countries) {
+      console.log("Countries created successfully.");
+    }
 
     await sequelize.sync();
     console.log("All models were synchronized successfully.");

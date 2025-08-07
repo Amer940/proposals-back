@@ -1,4 +1,4 @@
-const { db } = require("../../../../../db");
+const { db } = require("../../../../db");
 const MainTable = db.main_proposals;
 const Partners = db.partners;
 const Statuses = db.statuses;
@@ -7,7 +7,7 @@ const findPaginatedFilteredMainTableContentQuery = async (
   page,
   pageSize,
   whereSelect,
-  whereEmail
+  whereName
 ) => {
   return MainTable.findAndCountAll({
     where: whereSelect,
@@ -15,8 +15,8 @@ const findPaginatedFilteredMainTableContentQuery = async (
     include: [
       {
         model: Partners,
-        attributes: ["id", "email"],
-        where: whereEmail,
+        attributes: ["id", "name"],
+        where: whereName,
       },
       {
         model: Statuses,

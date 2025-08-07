@@ -10,7 +10,7 @@ const findPaginatedFilteredPartnerTableContentQuery = async (
 ) => {
   return Partners.findAndCountAll({
     where: wherePartner,
-    attributes: ["id", "name", "email", "city"],
+    attributes: ["id", "name", "email", "city", "description"],
     include: [
       {
         model: Country,

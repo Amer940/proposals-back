@@ -1,4 +1,4 @@
-const { db } = require("../../../../db");
+const { db } = require("../../../db");
 const Op = db.Op;
 
 const generateWhereForSelectGet = (status) => {
@@ -11,11 +11,11 @@ const generateWhereForSelectGet = (status) => {
   return where;
 };
 
-const generateWhereForEmailGet = (email) => {
+const generateWhereForEmailGet = (name) => {
   let where = {};
 
-  if (email) {
-    where.email = { [Op.like]: `%${email}%` };
+  if (name) {
+    where.name = { [Op.like]: `%${name}%` };
   }
 
   return where;
