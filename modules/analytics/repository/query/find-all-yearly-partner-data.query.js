@@ -1,22 +1,20 @@
 const { db } = require("../../../../db");
-const Movements = db.paid_movements;
+const Partners = db.partners;
 
 const Op = db.Op;
 const fn = db.fn;
+const literal = db.literal;
 const col = db.col;
 
-const getYearlyMoneyAnalyticsQuery = async () => {
-  return await Movements.findAll({
+const getYearlyPartnerAnalyticsQuery = async () => {
+  return await Partners.findAll({
     attributes: [
       [fn("DATE", col("createdAt")), "date"],
-      [fn("SUM", col("paid")), "year"],
+      [fn("COUNT", col("id")), "createdYearly"],
     ],
-    where: {
-      paid: { [Op.ne]: 0 },
-    },
     group: [fn("DATE", col("createdAt"))],
     order: [[fn("DATE", col("createdAt")), "ASC"]],
   });
 };
 
-module.exports = { getYearlyMoneyAnalyticsQuery };
+module.exports = { getYearlyPartnerAnalyticsQuery };

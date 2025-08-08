@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       demand: DataTypes.FLOAT,
       agreed: DataTypes.FLOAT,
+      paid: DataTypes.FLOAT,
       status_id: DataTypes.INTEGER,
       partner_id: DataTypes.INTEGER,
     },

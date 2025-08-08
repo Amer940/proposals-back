@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { sequelize } = require("./db");
 const { db } = require("./db");
+const cron = require("node-cron");
 
 const express = require("express");
 
@@ -9,6 +10,7 @@ var cors = require("cors");
 const PORT = process.env.PORT || 3000;
 
 const cookieParser = require("cookie-parser");
+const { setOldProposalsToIgnored } = require("./ignoredCron");
 app.use(cookieParser());
 app.use(
   cors({
@@ -30,10 +32,15 @@ app.use(
   require("./modules/analytics/routes/analytics.route")
 );
 
+cron.schedule("* 13 * * *", setOldProposalsToIgnored);
+
 async function startServer() {
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
+
+    await sequelize.sync();
+    console.log("All models were synchronized successfully.");
 
     const countries = await db.createCountries();
     if (countries) {
@@ -45,8 +52,10 @@ async function startServer() {
       console.log("Statuses created successfully.");
     }
 
-    await sequelize.sync();
-    console.log("All models were synchronized successfully.");
+    const triggers = await db.createTriggers();
+    if (triggers) {
+      console.log("Triggers created successfully.");
+    }
 
     app.listen(PORT, () => {
       console.log(

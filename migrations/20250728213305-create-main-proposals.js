@@ -15,6 +15,9 @@ module.exports = {
       agreed: {
         type: Sequelize.FLOAT,
       },
+      paid: {
+        type: Sequelize.FLOAT,
+      },
       status_id: {
         type: Sequelize.INTEGER,
       },

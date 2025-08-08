@@ -1,26 +1,25 @@
 const { db } = require("../../../../db");
-const Movements = db.paid_movements;
+const Partners = db.partners;
 
 const Op = db.Op;
 const fn = db.fn;
 const literal = db.literal;
 const col = db.col;
 
-const getMonthlyMoneyAnalyticsQuery = async () => {
-  return await Movements.findAll({
+const getMonthlyPartnerAnalyticsQuery = async () => {
+  return await Partners.findAll({
     attributes: [
       [fn("DATE", col("createdAt")), "date"],
-      [fn("SUM", col("paid")), "months"],
+      [fn("COUNT", col("id")), "created"],
     ],
     where: {
       createdAt: {
         [Op.gte]: literal("CURDATE() - INTERVAL 3 MONTH"),
       },
-      paid: { [Op.ne]: 0 },
     },
     group: [fn("DATE", col("createdAt"))],
     order: [[fn("DATE", col("createdAt")), "ASC"]],
   });
 };
 
-module.exports = { getMonthlyMoneyAnalyticsQuery };
+module.exports = { getMonthlyPartnerAnalyticsQuery };
