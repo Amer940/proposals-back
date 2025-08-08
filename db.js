@@ -15,7 +15,7 @@ db.partners = require("./models/partners")(sequelize, Sequelize);
 db.main_proposals = require("./models/main_proposals")(sequelize, Sequelize);
 db.countries = require("./models/countries")(sequelize, Sequelize);
 db.statuses = require("./models/statuses")(sequelize, Sequelize);
-db.paid_movements = require("./models/paid_movement")(sequelize, Sequelize);
+db.paid_movement = require("./models/paid_movement")(sequelize, Sequelize);
 db.status_movement = require("./models/status_movement")(sequelize, Sequelize);
 db.fn = Sequelize.fn;
 db.col = Sequelize.col;
@@ -326,13 +326,13 @@ db.createTriggers = async () => {
       FOR EACH ROW
       BEGIN
         IF NEW.paid != 0 THEN
-          INSERT INTO paid_movements (proposal_id, paid, createdAt, updatedAt)
+          INSERT INTO paid_movement (proposal_id, paid, createdAt, updatedAt)
           VALUES (NEW.id, NEW.paid, NOW(), NOW());
         END IF;
-        INSERT INTO status_movements (proposal_id, status_id, createdAt, updatedAt)
+        INSERT INTO status_movement (proposal_id, status_id, createdAt, updatedAt)
         VALUES (NEW.id, 3, NOW(), NOW());
         IF NEW.status_id != 3 THEN
-          INSERT INTO status_movements (proposal_id, status_id, createdAt, updatedAt)
+          INSERT INTO status_movement (proposal_id, status_id, createdAt, updatedAt)
           VALUES (NEW.id, NEW.status_id, NOW(), NOW());
         END IF;
       END;`);
@@ -345,39 +345,39 @@ db.createTriggers = async () => {
         DECLARE paidDiff FLOAT;
         SET paidDiff = NEW.paid - OLD.paid;
         IF paidDiff != 0 THEN
-          INSERT INTO paid_movements (proposal_id, paid, createdAt, updatedAt)
+          INSERT INTO paid_movement (proposal_id, paid, createdAt, updatedAt)
           VALUES (NEW.id, paidDiff, NOW(), NOW());
         END IF;
 
         IF NEW.status_id != OLD.status_id AND NEW.status_id != 3 THEN
           IF NOT EXISTS (
-            SELECT 1 FROM status_movements 
+            SELECT 1 FROM status_movement 
             WHERE proposal_id = NEW.id AND status_id = 3
           ) THEN
-            INSERT INTO status_movements (proposal_id, status_id, createdAt, updatedAt)
+            INSERT INTO status_movement (proposal_id, status_id, createdAt, updatedAt)
             VALUES (NEW.id, 3, NOW(), NOW());
           END IF;
 
           IF EXISTS (
-            SELECT 1 FROM status_movements 
+            SELECT 1 FROM status_movement 
             WHERE proposal_id = NEW.id AND status_id != 3
           ) THEN
-            UPDATE status_movements
+            UPDATE status_movement
             SET status_id = NEW.status_id,
                 updatedAt = NOW()
             WHERE proposal_id = NEW.id AND status_id != 3;
           ELSE
-            INSERT INTO status_movements (proposal_id, status_id, createdAt, updatedAt)
+            INSERT INTO status_movement (proposal_id, status_id, createdAt, updatedAt)
             VALUES (NEW.id, NEW.status_id, NOW(), NOW());
           END IF;
         END IF;
 
         IF NEW.status_id = 3 THEN
           IF EXISTS (
-            SELECT 1 FROM status_movements 
+            SELECT 1 FROM status_movement 
             WHERE proposal_id = NEW.id AND status_id != 3
           ) THEN
-            DELETE FROM status_movements WHERE proposal_id = NEW.id AND status_id != 3;
+            DELETE FROM status_movement WHERE proposal_id = NEW.id AND status_id != 3;
           END IF;
         END IF;
 
@@ -389,7 +389,7 @@ db.createTriggers = async () => {
       FOR EACH ROW
       BEGIN
         DELETE FROM paid_movement WHERE proposal_id = OLD.id;
-        DELETE FROM status_movements WHERE proposal_id = OLD.id;
+        DELETE FROM status_movement WHERE proposal_id = OLD.id;
       END;
     `);
 

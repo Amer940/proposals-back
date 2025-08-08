@@ -1,5 +1,5 @@
 const { db } = require("../../../../db");
-const Movements = db.paid_movements;
+const Movements = db.paid_movement;
 
 const Op = db.Op;
 const fn = db.fn;
