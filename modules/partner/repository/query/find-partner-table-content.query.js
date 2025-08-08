@@ -18,6 +18,7 @@ const findPaginatedFilteredPartnerTableContentQuery = async (
         where: whereCountry,
       },
     ],
+    order: [["createdAt", "DESC"]],
     limit: +pageSize,
     offset: +page * +pageSize,
   });

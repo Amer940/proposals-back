@@ -3,6 +3,9 @@ const MainTable = db.main_proposals;
 const Partners = db.partners;
 const Statuses = db.statuses;
 
+const fn = db.fn;
+const col = db.col;
+
 const findPaginatedFilteredMainTableContentQuery = async (
   page,
   pageSize,
@@ -11,7 +14,7 @@ const findPaginatedFilteredMainTableContentQuery = async (
 ) => {
   return MainTable.findAndCountAll({
     where: whereSelect,
-    attributes: ["id", "demand", "agreed"],
+    attributes: ["id", "demand", "agreed", "paid"],
     include: [
       {
         model: Partners,
@@ -23,6 +26,7 @@ const findPaginatedFilteredMainTableContentQuery = async (
         attributes: ["id", "name"],
       },
     ],
+    order: [["createdAt", "DESC"]],
     limit: +pageSize,
     offset: +page * +pageSize,
   });

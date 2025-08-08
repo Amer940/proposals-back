@@ -6,6 +6,7 @@ const editProposalCommand = async (value) => {
     {
       demand: value.demand,
       agreed: value.agreed,
+      paid: value.paid,
       status_id: value.status_id,
       partner_id: value.partner_id,
     },

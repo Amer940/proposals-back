@@ -9,6 +9,10 @@ const checkDataForCreateProposal = Joi.object({
     "any.required": "Agreed amount is required",
     "string.base": "Agreed amount must be a string",
   }),
+  paid: Joi.string().required().messages({
+    "any.required": "Paid amount is required",
+    "string.base": "Paid amount must be a string",
+  }),
   partner_id: Joi.number().required().messages({
     "any.required": "Partner is required",
     "number.base": "Partner ID must be a number",
